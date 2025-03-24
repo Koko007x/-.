@@ -46,10 +46,11 @@
         // ฟังก์ชันแสดงข้อมูลการเดิมพันทั้งหมด
         function displayBetData() {
             const betList = document.getElementById("betDataList");
+            betList.innerHTML = ""; // ล้างข้อมูลเก่า
             const bets = JSON.parse(localStorage.getItem("bets")) || [];
             
             if (bets.length === 0) {
-                betList.innerHTML = "ยังไม่มีข้อมูลการเดิมพัน.";
+                betList.innerHTML = "<p>ยังไม่มีข้อมูลการเดิมพัน.</p>";
             } else {
                 bets.forEach((bet, index) => {
                     const betItem = document.createElement("p");
@@ -58,6 +59,16 @@
                 });
             }
         }
+
+        // อัปเดตข้อมูลอัตโนมัติทุก 2 วินาที
+        setInterval(displayBetData, 2000);
+
+        // อัปเดตข้อมูลเมื่อ LocalStorage เปลี่ยนแปลง
+        window.addEventListener("storage", function(event) {
+            if (event.key === "bets") {
+                displayBetData();
+            }
+        });
     </script>
 </body>
 </html>
